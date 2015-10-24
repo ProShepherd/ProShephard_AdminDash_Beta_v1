@@ -112,31 +112,26 @@ var app = angular.module("proShepherdAdmin", [
                 longitude: value.longitude
             };
         };
+
+        var addUpdateUser = function(user) {
+        	if(!$scope.getMarker(user)) {
+                $scope.markers.push($scope.createMarker(user));
+            }
+            else {
+                $scope.updateMarker(user);
+            }
+        };
         
         if(angular.isDefined(eventAlerts) && 
             eventAlerts.users &&
             eventAlerts.support) {
             
             angular.forEach(eventAlerts.users, function(value, key) {
-                var user = mapUser(value, key);
-                
-                if(!$scope.getMarker(user)) {
-                    $scope.markers.push($scope.createMarker(user));
-                }
-                else {
-                    $scope.updateMarker(user);
-                }
+                addUpdateUser(mapUser(value, key));
             });
             
             angular.forEach(eventAlerts.support, function(value, key) {
-                var user = mapUser(value, key);
-                
-                if(!$scope.getMarker(user)) {
-                    $scope.markers.push($scope.createMarker(user));
-                }
-                else {
-                    $scope.updateMarker(user);
-                }
+                addUpdateUser(mapUser(value, key));
             });
         }
     });

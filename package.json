@@ -1,0 +1,11 @@
+{
+  "name": "ProShepherd_Admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "angular-google-maps": "^2.2.1"
+  },
+  "author": "",
+  "license": "ISC"
+}

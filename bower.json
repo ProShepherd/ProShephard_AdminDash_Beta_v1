@@ -16,6 +16,8 @@
   ],
   "dependencies": {
     "font-awesome": "~4.4.0",
-    "angular-google-maps": "~2.2.1"
+    "angular-google-maps": "~2.2.1",
+    "angular": "~1.4.7",
+    "bootstrap": "~3.3.5"
   }
 }

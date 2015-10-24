@@ -2,10 +2,35 @@ var app = angular.module("proShepherdAdmin", [
     'uiGmapgoogle-maps',
     'firebase',
     'proShepherdAdmin.Services'])
-.controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi, Alert) {
+.controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi, Alerts) {
+    
+    $scope.markers = [];
+    $scope.updateMarker = null;
+    $scope.createMarker = null;
+    $scope.getMarker = null;
+    $scope.getIcon = null;
+    
+    $scope.init = function() {
+        Alerts('Test-Event').$bindTo($scope, 'eventAlerts')
+        .then(function(result) {
+            console.dir($scope.eventAlerts);
+        });
+    };
+    
+    $scope.createMarker = function(user) {
+        var ret = {
+            latitude: user.latitude,
+            longitude: user.longitude,
+            title: user.id,
+            icon: getIcon(user)
+        };
+
+        return ret;
+    };
     
     var mapFunctions = function() {
-    	var infoWindow;  
+        
+        $scope.init();
 
     	$scope.map = {
           center: {
@@ -17,43 +42,46 @@ var app = angular.module("proShepherdAdmin", [
         };
         
         $scope.options = {
-	      scrollwheel: false
-	    };
+            scrollwheel: false
+        };
 
-	    var getIcon = function(user) {
+	    $scope.getIcon = function(user) {
 	    	var path = "assets/images/";
 
-	    	if (user.type == "rider") {
+	    	if (user.type == "user") {
 	    		if (user.state == "normal") {
 	    			return path + "rider-normal.png";
-	    		} else if (user.state == "distressed") {
+	    		} 
+                else if (user.state == "distressed") {
 	    			return path + "rider-distressed.png";
-	    		} else {
+	    		} 
+                else {
 	    			return path + "rider-triage.png";
 	    		}
 	    	} else {
 	    		if (user.state == "normal") {
 	    			return path + "support-normal.png";
-	    		} else {
+	    		}
+                else {
 	    			return path + "support-triage.png";
 	    		}
 	    	}
 	    };
 
-	    var createMarker = function(user) {
+         $scope.createMarker = function(user) {
 
 		    var marker = {
 			    latitude: user.latitude,
 			    longitude: user.longitude,
 			    title: user.id,
-			    icon: getIcon(user)
+			    icon: $scope.getIcon(user)
 		    };
 	        marker["id"] = user.id;
 
 	        return marker;
 	    };
 
-	    var getMarker = function(user) {
+	    $scope.getMarker = function(user) {
 	    	var arrayLength = $scope.markers.length;
 			for (var i = 0; i < arrayLength; i++) {
 			    if ( $scope.markers[i]["id"] == user.id) {
@@ -63,37 +91,55 @@ var app = angular.module("proShepherdAdmin", [
 			return null;
 	    };
 
-	    var updateMarker = function(user) {
-	    	var marker = getMarker(user);
+	    $scope.updateMarker = function(user) {
+	    	var marker = $scope.getMarker(user);
         	if (marker != null) {
         		marker.latitude = user.latitude;
         		marker.longitude = user.longitude;
-        		marker.icon = getIcon(user);
-		        $scope.$apply();
+        		marker.icon = $scope.getIcon(user);
         	}
 	    };
-
-	    $scope.markers = [];
-
-	    // Get the bounds from the map once it's loaded
-	    $scope.$watch(function() {
-	      return $scope.map.bounds;
-	    }, function(nv, ov) {
-	      // Only need to regenerate once
-	      if (!ov.southwest && nv.southwest) {
-	        var markers = [];
-	        var tyler = {id:"uid-tyler", type:"rider", state:"normal", latitude: 42.9851, longitude: -78.6688};
-	        var anthony = {id:"uid-anthony", type:"rider", state:"distressed", latitude: 42.7851, longitude: -78.7680};
-	        var val = {id:"uid-val", type:"support", state:"triage", latitude: 42.8851, longitude: -78.8680};
-
-	        markers.push(createMarker(tyler));
-	        markers.push(createMarker(anthony));
-	        markers.push(createMarker(val));
-	        
-	        $scope.markers = markers;
-	      }
-	    }, true);
+        
     };
+    
+    $scope.$watch('eventAlerts', function(eventAlerts) {
+        var mapUser = function(value, key) {
+            return user = {
+                id: key, 
+                type: value.bibNumber < 0 ? 'support' : 'user', 
+                state: 'normal', 
+                latitude: value.latitude, 
+                longitude: value.longitude
+            };
+        };
+        
+        if(angular.isDefined(eventAlerts) && 
+            eventAlerts.users &&
+            eventAlerts.support) {
+            
+            angular.forEach(eventAlerts.users, function(value, key) {
+                var user = mapUser(value, key);
+                
+                if(!$scope.getMarker(user)) {
+                    $scope.markers.push($scope.createMarker(user));
+                }
+                else {
+                    $scope.updateMarker(user);
+                }
+            });
+            
+            angular.forEach(eventAlerts.support, function(value, key) {
+                var user = mapUser(value, key);
+                
+                if(!$scope.getMarker(user)) {
+                    $scope.markers.push($scope.createMarker(user));
+                }
+                else {
+                    $scope.updateMarker(user);
+                }
+            });
+        }
+    });
 
     uiGmapGoogleMapApi.then(function(maps) {
         mapFunctions();

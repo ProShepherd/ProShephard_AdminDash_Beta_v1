@@ -68,6 +68,7 @@ var app = angular.module("proShepherdAdmin", [
         	if (marker != null) {
         		marker.latitude = user.latitude;
         		marker.longitude = user.longitude;
+        		marker.icon = getIcon(user);
 		        $scope.$apply();
         	}
 	    };

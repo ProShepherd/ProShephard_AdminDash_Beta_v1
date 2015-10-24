@@ -1,0 +1,21 @@
+{
+  "name": "ProShepherd_Admin",
+  "version": "0.0.0",
+  "homepage": "https://github.com/ProShepherd/ProShepherd_AdminDash_Beta_v1",
+  "authors": [
+    "flemtop <tflem18@gmail.com>"
+  ],
+  "description": "Admin Dashboard for ProShepherd mobile app services",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.4.0",
+    "angular-google-maps": "~2.2.1"
+  }
+}

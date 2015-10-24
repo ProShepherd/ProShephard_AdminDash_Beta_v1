@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "angular-google-maps": "^2.2.1"
   },
   "author": "",
   "license": "ISC"

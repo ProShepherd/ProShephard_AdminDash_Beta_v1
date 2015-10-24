@@ -5,6 +5,8 @@ var app = angular.module("proShepherdAdmin", [
 .controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi, Alert) {
     
     var mapFunctions = function() {
+    	var infoWindow;  
+
     	$scope.map = {
           center: {
             latitude: 42.9851,
@@ -39,18 +41,35 @@ var app = angular.module("proShepherdAdmin", [
 	    };
 
 	    var createMarker = function(user) {
-		    var ret = {
+
+		    var marker = {
 			    latitude: user.latitude,
 			    longitude: user.longitude,
 			    title: user.id,
 			    icon: getIcon(user)
 		    };
-	        ret["id"] = user.id;
-	        return ret;
+	        marker["id"] = user.id;
+
+	        return marker;
+	    };
+
+	    var getMarker = function(user) {
+	    	var arrayLength = $scope.markers.length;
+			for (var i = 0; i < arrayLength; i++) {
+			    if ( $scope.markers[i]["id"] == user.id) {
+			    	return $scope.markers[i];
+			    }
+			}
+			return null;
 	    };
 
 	    var updateMarker = function(user) {
-
+	    	var marker = getMarker(user);
+        	if (marker != null) {
+        		marker.latitude = user.latitude;
+        		marker.longitude = user.longitude;
+		        $scope.$apply();
+        	}
 	    };
 
 	    $scope.markers = [];

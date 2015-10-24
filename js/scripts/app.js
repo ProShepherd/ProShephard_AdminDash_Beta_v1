@@ -63,12 +63,15 @@ var app = angular.module("proShepherdAdmin", [
 
 	    	if (user.type == "user") {
 	    		if (user.state == "normal") {
+	    			//Bicycle by Larisa Skosyrska from the Noun Project
 	    			return path + "rider-normal.png";
 	    		} 
                 else if (user.state == "distressed") {
+                	//Warning by Tahsin Tahil from the Noun Project
 	    			return path + "rider-distressed.png";
 	    		} 
                 else {
+                	//Life Saver by Kristen Gee from the Noun Project
 	    			return path + "rider-triage.png";
 	    		}
 	    	} else {
@@ -76,6 +79,7 @@ var app = angular.module("proShepherdAdmin", [
 	    			return path + "support-normal.png";
 	    		}
                 else {
+                	//medical by Greg Beck from the Noun Project
 	    			return path + "support-triage.png";
 	    		}
 	    	}

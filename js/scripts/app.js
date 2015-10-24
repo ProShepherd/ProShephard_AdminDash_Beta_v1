@@ -1,16 +1,17 @@
 var app = angular.module("proShepherdAdmin", ['uiGmapgoogle-maps'])
-.controller('mapCtrl', function($scope, $timeout) {
-	$timeout(function(){
-		$scope.map = {
-	      center: {
-	        latitude: 42.9851,
-	        longitude: -78.6680
-	      },
-	      zoom: 9,
-	      bounds: {}
-	    };
-
-	    $scope.options = {
+.controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi) {
+    
+    uiGmapGoogleMapApi.then(function(maps) {
+        $scope.map = {
+          center: {
+            latitude: 42.9851,
+            longitude: -78.6680
+          },
+          zoom: 9,
+          bounds: {}
+        };
+        
+        $scope.options = {
 	      scrollwheel: false
 	    };
 
@@ -39,8 +40,8 @@ var app = angular.module("proShepherdAdmin", ['uiGmapgoogle-maps'])
 	        
 	        $scope.markers = markers;
 	      }
-	    }, true);}
-		, 1000
-	);
+	    }, true);
+        
+    });
 });
 

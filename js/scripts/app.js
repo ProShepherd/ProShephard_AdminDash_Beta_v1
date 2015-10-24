@@ -1,8 +1,8 @@
 var app = angular.module("proShepherdAdmin", ['uiGmapgoogle-maps'])
 .controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi) {
     
-    uiGmapGoogleMapApi.then(function(maps) {
-        $scope.map = {
+    var mapFunctions = function() {
+    	$scope.map = {
           center: {
             latitude: 42.9851,
             longitude: -78.6680
@@ -15,14 +15,36 @@ var app = angular.module("proShepherdAdmin", ['uiGmapgoogle-maps'])
 	      scrollwheel: false
 	    };
 
-	    var createMarker = function(name, latitude, longitude) {
-	      var ret = {
-	        latitude: latitude,
-	        longitude: longitude,
-	        title: name
-	      };
-	      ret["id"] = name;
-	      return ret;
+	    var getIcon = function(user) {
+	    	var path = "assets/images/";
+
+	    	if (user.type == "rider") {
+	    		if (user.state == "normal") {
+	    			return path + "rider-normal.png";
+	    		} else if (user.state == "distressed") {
+	    			return path + "rider-distressed.png";
+	    		} else {
+	    			return path + "rider-triage.png";
+	    		}
+	    	} else {
+	    		if (user.state == "normal") {
+	    			return path + "support-normal.png";
+	    		} else {
+	    			return path + "support-triage.png";
+	    		}
+	    	}
+	    };
+
+	    var createMarker = function(name, latitude, longitude, iconPath) {
+
+		    var ret = {
+			    latitude: latitude,
+			    longitude: longitude,
+			    title: name,
+			    icon: iconPath
+		    };
+	        ret["id"] = name;
+	        return ret;
 	    };
 
 	    $scope.markers = [];
@@ -34,14 +56,21 @@ var app = angular.module("proShepherdAdmin", ['uiGmapgoogle-maps'])
 	      // Only need to regenerate once
 	      if (!ov.southwest && nv.southwest) {
 	        var markers = [];
-	        markers.push(createMarker('tyler', 42.9851, -78.6680));
-	        markers.push(createMarker('anthony', 42.7851, -78.7680));
-	        markers.push(createMarker('val', 42.8851, -78.8680));
+	        var tyler = {type:"rider", state:"normal"};
+	        var anthony = {type:"rider", state:"distressed"};
+	        var val = {type:"support", state:"triage"};
+
+	        markers.push(createMarker('tyler', 42.9851, -78.6680, getIcon(tyler)));
+	        markers.push(createMarker('anthony', 42.7851, -78.7680, getIcon(anthony)));
+	        markers.push(createMarker('val', 42.8851, -78.8680, getIcon(val)));
 	        
 	        $scope.markers = markers;
 	      }
 	    }, true);
-        
+    };
+
+    uiGmapGoogleMapApi.then(function(maps) {
+        mapFunctions();
     });
 });
 

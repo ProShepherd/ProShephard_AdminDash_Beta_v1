@@ -38,16 +38,19 @@ var app = angular.module("proShepherdAdmin", [
 	    	}
 	    };
 
-	    var createMarker = function(name, latitude, longitude, iconPath) {
-
+	    var createMarker = function(user) {
 		    var ret = {
-			    latitude: latitude,
-			    longitude: longitude,
-			    title: name,
-			    icon: iconPath
+			    latitude: user.latitude,
+			    longitude: user.longitude,
+			    title: user.id,
+			    icon: getIcon(user)
 		    };
-	        ret["id"] = name;
+	        ret["id"] = user.id;
 	        return ret;
+	    };
+
+	    var updateMarker = function(user) {
+
 	    };
 
 	    $scope.markers = [];
@@ -59,13 +62,13 @@ var app = angular.module("proShepherdAdmin", [
 	      // Only need to regenerate once
 	      if (!ov.southwest && nv.southwest) {
 	        var markers = [];
-	        var tyler = {type:"rider", state:"normal"};
-	        var anthony = {type:"rider", state:"distressed"};
-	        var val = {type:"support", state:"triage"};
+	        var tyler = {id:"uid-tyler", type:"rider", state:"normal", latitude: 42.9851, longitude: -78.6688};
+	        var anthony = {id:"uid-anthony", type:"rider", state:"distressed", latitude: 42.7851, longitude: -78.7680};
+	        var val = {id:"uid-val", type:"support", state:"triage", latitude: 42.8851, longitude: -78.8680};
 
-	        markers.push(createMarker('tyler', 42.9851, -78.6680, getIcon(tyler)));
-	        markers.push(createMarker('anthony', 42.7851, -78.7680, getIcon(anthony)));
-	        markers.push(createMarker('val', 42.8851, -78.8680, getIcon(val)));
+	        markers.push(createMarker(tyler));
+	        markers.push(createMarker(anthony));
+	        markers.push(createMarker(val));
 	        
 	        $scope.markers = markers;
 	      }

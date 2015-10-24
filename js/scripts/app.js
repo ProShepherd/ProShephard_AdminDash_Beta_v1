@@ -5,6 +5,7 @@ var app = angular.module("proShepherdAdmin", [
 .controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi, Alerts) {
     
     $scope.markers = [];
+    $scope.eventPathPoints = [];
     $scope.updateMarker = null;
     $scope.createMarker = null;
     $scope.getMarker = null;
@@ -34,13 +35,25 @@ var app = angular.module("proShepherdAdmin", [
 
     	$scope.map = {
           center: {
-            latitude: 42.9851,
-            longitude: -78.6680
+            latitude: 42.898414,
+            longitude: -78.8713798
           },
-          zoom: 9,
+          zoom: 16,
           bounds: {}
         };
         
+        $scope.eventPathPoints = [
+        	{ latitude:42.8968254, longitude: -78.8683798 },
+        	{ latitude:42.8968411, longitude: -78.8707508 },
+        	{ latitude:42.8968647, longitude: -78.8748063 },
+        	{ latitude:42.899414,  longitude: -78.87391 },
+        	{ latitude:42.8993904, longitude: -78.8699296 },
+        	{ latitude:42.9003807, longitude: -78.8695756 },
+        	{ latitude:42.9003414, longitude: -78.8672367 },
+        	{ latitude:42.8968518, longitude: -78.8683417 },
+        	{ latitude:42.8968254, longitude: -78.8683798 }
+        ];
+
         $scope.options = {
             scrollwheel: false
         };

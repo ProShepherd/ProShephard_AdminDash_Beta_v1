@@ -1,5 +1,8 @@
-var app = angular.module("proShepherdAdmin", ['uiGmapgoogle-maps'])
-.controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi) {
+var app = angular.module("proShepherdAdmin", [
+    'uiGmapgoogle-maps',
+    'firebase',
+    'proShepherdAdmin.Services'])
+.controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi, Alert) {
     
     uiGmapGoogleMapApi.then(function(maps) {
         $scope.map = {

@@ -10,4 +10,13 @@
     color:#000000;
     text-decoration: none;
     font-size:90px;
+    padding-left: 90px;
 }
+
+.navbar-nav > li > a, .navbar-brand {
+   padding-top:4px !important; 
+   padding-bottom:0 !important;
+   height: 28px;
+}
+
+.navbar {min-height:28px !important;}

@@ -36,7 +36,7 @@
                 <div id="map_canvas" ng-controller="mapCtrl">
                     <!-- Google Map Directive -->
                     <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
-                        <ui-gmap-markers models="markers" coords="'self'" icon="'icon'"></ui-gmap-markers>
+                        <ui-gmap-markers models="markers" options="'options'" coords="'self'" icon="'icon'"></ui-gmap-markers>
                         <ui-gmap-polyline path="eventPathPoints" draggable="false" geodesic="false" stroke="map.lineStyle" fit="true"></ui-gmap-polyline>
                         </shape>
                     </ui-gmap-google-map>

@@ -93,9 +93,16 @@ var app = angular.module("proShepherdAdmin", [
 			    longitude: user.longitude,
 			    title: user.id,
                 type: user.type,
-			    icon: $scope.getIcon(user)
+			    icon: $scope.getIcon(user),
 		    };
 	        marker["id"] = user.id;
+
+	        if (user.state == "distressed"){
+    			marker.options = { animation: google.maps.Animation.BOUNCE };
+    		}
+    		else {
+    			marker.options = { animation: null };
+    		}
 
 	        return marker;
 	    };
@@ -116,6 +123,12 @@ var app = angular.module("proShepherdAdmin", [
         		marker.latitude = user.latitude;
         		marker.longitude = user.longitude;
         		marker.icon = $scope.getIcon(user);
+        		if (user.state == "distressed"){
+        			marker.options = { animation: google.maps.Animation.BOUNCE };
+        		}
+        		else {
+        			marker.options = { animation: null };
+        		}
         	}
 	    };
 

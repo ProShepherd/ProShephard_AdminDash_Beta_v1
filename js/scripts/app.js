@@ -17,7 +17,7 @@ var app = angular.module("proShepherdAdmin", [
     $scope.init = function() {
         Alerts('Test-Event').$bindTo($scope, 'eventAlerts')
         .then(function(result) {
-            console.dir($scope.eventAlerts);
+            //console.dir($scope.eventAlerts);
         });
     };
     
@@ -26,17 +26,6 @@ var app = angular.module("proShepherdAdmin", [
         "Step2": "En-route",
         "Step3": "On site",
         "Step4": "Resolved"
-    };
-    
-    $scope.createMarker = function(user) {
-        var ret = {
-            latitude: user.latitude,
-            longitude: user.longitude,
-            title: user.id,
-            icon: getIcon(user)
-        };
-
-        return ret;
     };
     
     var mapFunctions = function() {
@@ -101,6 +90,7 @@ var app = angular.module("proShepherdAdmin", [
 			    latitude: user.latitude,
 			    longitude: user.longitude,
 			    title: user.id,
+                type: user.type,
 			    icon: $scope.getIcon(user)
 		    };
 	        marker["id"] = user.id;
@@ -111,7 +101,7 @@ var app = angular.module("proShepherdAdmin", [
 	    $scope.getMarker = function(user) {
 	    	var arrayLength = $scope.markers.length;
 			for (var i = 0; i < arrayLength; i++) {
-			    if ( $scope.markers[i]["id"] == user.id) {
+			    if ($scope.markers[i]["id"] == user.id) {
 			    	return $scope.markers[i];
 			    }
 			}
@@ -184,7 +174,6 @@ var app = angular.module("proShepherdAdmin", [
             };
         };
         
-
         var addUpdateUser = function(user) {
         	if(!$scope.getMarker(user)) {
                 $scope.markers.push($scope.createMarker(user));
@@ -240,6 +229,18 @@ var app = angular.module("proShepherdAdmin", [
             
         }
     });
+    
+    $scope.assignSupport = function(alert) {
+        var arrayLength = $scope.markers.length;
+        for (var i = 0; i < arrayLength; i++) {
+            var theMarker = $scope.markers[i];
+            if (theMarker.id === alert.userId) {
+                theMarker.state = "triage";
+                $scope.eventAlerts.users[theMarker.id].supportId = "uid-support-1";
+                $scope.eventAlerts.support["uid-support-1"].status = "Step2";
+            }
+        }
+    };
     
     uiGmapGoogleMapApi.then(function(maps) {
         mapFunctions();

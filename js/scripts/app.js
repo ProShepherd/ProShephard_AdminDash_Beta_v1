@@ -130,7 +130,7 @@ var app = angular.module("proShepherdAdmin", [
     };
     
     $scope.$watch('eventAlerts', function(eventAlerts) {
-        var mapUser = function(value, key) {
+        var mapUser = function(value, key, supports) {
         	var status = "normal";
 
         	angular.forEach(value.Alerts, function(value2, key2) {
@@ -144,6 +144,16 @@ var app = angular.module("proShepherdAdmin", [
 			    	status = "triage";
 			    }
         	});
+
+        	// Dirty code to reset support person status and reset our link to the support truck
+        	if (value.supportid != '' && status == "normal") {
+        		angular.forEach(supports, function(value2, key2) {
+	                if (value.supportId == key2) {
+	                	value2.status = "Step4";
+	                	value.supportId = '';
+	                }
+	            });
+        	}
         	
             return user = {
                 id: key, 
@@ -218,10 +228,9 @@ var app = angular.module("proShepherdAdmin", [
             
             angular.forEach(eventAlerts.users, function(value, key) {
                 var userId = key;
-                addUpdateUser(mapUser(value, userId));
+                addUpdateUser(mapUser(value, userId, eventAlerts.support));
                 angular.forEach(value.Alerts, function(value, key) { 
                     pushAlerts(mapAlerts(value, key, userId));
-                    console.dir($scope.alerts);
                 });
             });
             

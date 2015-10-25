@@ -30,7 +30,6 @@
 </head>
 
 <body>
-
     <div id="wrapper">
         <div id="page-wrapper">
             <div class="container-fluid">
@@ -50,14 +49,14 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="height: 44vh; overflow: scroll">
                         <table class="table table-bordered table-hover">
                             <tr style="font-weight: bold">
                                 <th width="15%" data-sortable="true">Participant ID</th>
                                 <th width="30%" data-sortable="true">Alert Type</th>
                                 <th width="30%" data-sortable="true">Status</th>
                             </tr>
-                            <tr ng-repeat="alert in alerts track by alert.id" ng-class="{'success' : alert.alertStatus == 'Resolved'}" ng-hide="showResolved == 0 && alert.alertStatus == 'Resolved'">
+                            <tr ng-repeat="alert in alerts track by alert.id" ng-class="{'success' : alert.alertStatus == 'Resolved', 'danger' : alert.alertStatus == 'Distressed', 'warning' : alert.alertStatus == 'En-route' || alert.alertStatus == 'On site'}" ng-hide="showResolved == 0 && alert.alertStatus == 'Resolved'">
                                 <td>{{ alert.userId }}</td>
                                 <td>{{ alert.alertType }}</td>
                                 <td>{{ alert.alertStatus }}</td>

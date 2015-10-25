@@ -1,7 +1,8 @@
 var app = angular.module("proShepherdAdmin", [
     'uiGmapgoogle-maps',
     'firebase',
-    'proShepherdAdmin.Services'])
+    'proShepherdAdmin.Services',
+    'ui.bootstrap'])
 .controller('mapCtrl', function($scope, $timeout, uiGmapGoogleMapApi, Alerts) {
     
     $scope.markers = [];
@@ -10,12 +11,20 @@ var app = angular.module("proShepherdAdmin", [
     $scope.createMarker = null;
     $scope.getMarker = null;
     $scope.getIcon = null;
+    $scope.alerts = [];
     
     $scope.init = function() {
         Alerts('Test-Event').$bindTo($scope, 'eventAlerts')
         .then(function(result) {
             console.dir($scope.eventAlerts);
         });
+    };
+    
+    $scope.alertStatusTypes = {
+        "Step1": "Distressed",
+        "Step2": "En-route",
+        "Step3": "On site",
+        "Step4": "Resolved"
     };
     
     $scope.createMarker = function(user) {
@@ -144,6 +153,7 @@ var app = angular.module("proShepherdAdmin", [
                 longitude: value.longitude
             };
         };
+        
 
         var addUpdateUser = function(user) {
         	if(!$scope.getMarker(user)) {
@@ -154,20 +164,54 @@ var app = angular.module("proShepherdAdmin", [
             }
         };
         
+        var mapAlerts = function(value, key, userId) {
+            return alert = {
+                id: key,
+                userId: userId,
+                alertStatus: $scope.alertStatusTypes[value.alertStatus],
+                alertType: value.alertType
+            };
+        };
+        
+        var pushAlerts = function(alert) {
+            var arrayLength = $scope.alerts.length;
+            var elementExists = false;
+            var alertIndex = null;
+            for (var i = 0; i < arrayLength; i++) {
+                if ( $scope.alerts[i]["id"] === alert.id) {
+                    elementExists = true;
+                    alertIndex = i;
+                    break;
+                }
+            }
+            if(!elementExists) {
+                $scope.alerts.push(alert);
+            } 
+            else {
+                $scope.alerts.splice(alertIndex, 1, alert);
+            }
+        };
+        
         if(angular.isDefined(eventAlerts) && 
             eventAlerts.users &&
             eventAlerts.support) {
             
             angular.forEach(eventAlerts.users, function(value, key) {
-                addUpdateUser(mapUser(value, key));
+                var userId = key;
+                addUpdateUser(mapUser(value, userId));
+                angular.forEach(value.Alerts, function(value, key) { 
+                    pushAlerts(mapAlerts(value, key, userId));
+                    console.dir($scope.alerts);
+                });
             });
             
             angular.forEach(eventAlerts.support, function(value, key) {
                 addUpdateUser(mapUser(value, key));
             });
+            
         }
     });
-
+    
     uiGmapGoogleMapApi.then(function(maps) {
         mapFunctions();
     });

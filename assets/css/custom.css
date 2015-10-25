@@ -1,1 +1,13 @@
 .angular-google-map-container { height: 600px; }
+
+.navbar-default {
+    background-color: #ffdf4f;
+    border-color: #ffdf4f;
+    color: #ffdf4f;
+}
+
+.navbar-text > a {
+    color:#000000;
+    text-decoration: none;
+    font-size:90px;
+}

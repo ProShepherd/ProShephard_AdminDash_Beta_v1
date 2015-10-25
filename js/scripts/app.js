@@ -13,6 +13,8 @@ var app = angular.module("proShepherdAdmin", [
     $scope.getIcon = null;
     $scope.alerts = [];
     $scope.showResolved = 0;
+    $scope.addUpdateUser = null;
+    $scope.mapSupport = null;
     
     $scope.init = function() {
         Alerts('Test-Event').$bindTo($scope, 'eventAlerts')
@@ -116,6 +118,35 @@ var app = angular.module("proShepherdAdmin", [
         		marker.icon = $scope.getIcon(user);
         	}
 	    };
+
+	    $scope.addUpdateUser = function(user) {
+        	if(!$scope.getMarker(user)) {
+                $scope.markers.push($scope.createMarker(user));
+            }
+            else {
+                $scope.updateMarker(user);
+            }
+        };
+
+        $scope.mapSupport = function(value, key) {
+        	var status = "normal";
+
+		    // if any alerts are in Step1, that user is 'distressed'
+		    // else step 2 and 3 both map to 'triage'
+		    if (value.status != "Step4") {
+		    	status = "triage";
+		    } else {
+		    	status = "normal";
+		    }
+        	
+            return user = {
+                id: key, 
+                type: 'support',
+                state: status, 
+                latitude: value.latitude, 
+                longitude: value.longitude
+            };
+        };
         
     };
     
@@ -154,34 +185,7 @@ var app = angular.module("proShepherdAdmin", [
             };
         };
 
-        var mapSupport = function(value, key) {
-        	var status = "normal";
-
-		    // if any alerts are in Step1, that user is 'distressed'
-		    // else step 2 and 3 both map to 'triage'
-		    if (value.status != "Step4") {
-		    	status = "triage";
-		    } else {
-		    	status = "normal";
-		    }
-        	
-            return user = {
-                id: key, 
-                type: 'support',
-                state: status, 
-                latitude: value.latitude, 
-                longitude: value.longitude
-            };
-        };
         
-        var addUpdateUser = function(user) {
-        	if(!$scope.getMarker(user)) {
-                $scope.markers.push($scope.createMarker(user));
-            }
-            else {
-                $scope.updateMarker(user);
-            }
-        };
         
         var mapAlerts = function(value, key, userId) {
             return alert = {
@@ -217,14 +221,14 @@ var app = angular.module("proShepherdAdmin", [
             
             angular.forEach(eventAlerts.users, function(value, key) {
                 var userId = key;
-                addUpdateUser(mapUser(value, userId, eventAlerts.support));
+                $scope.addUpdateUser(mapUser(value, userId, eventAlerts.support));
                 angular.forEach(value.Alerts, function(value, key) { 
                     pushAlerts(mapAlerts(value, key, userId));
                 });
             });
             
             angular.forEach(eventAlerts.support, function(value, key) {
-                addUpdateUser(mapSupport(value, key));
+                $scope.addUpdateUser($scope.mapSupport(value, key));
             });
             
         }
@@ -238,6 +242,7 @@ var app = angular.module("proShepherdAdmin", [
                 theMarker.state = "triage";
                 $scope.eventAlerts.users[theMarker.id].supportId = "uid-support-1";
                 $scope.eventAlerts.support["uid-support-1"].status = "Step2";
+                $scope.addUpdateUser($scope.mapSupport($scope.eventAlerts.support["uid-support-1"], "uid-support-1"));
             }
         }
     };

@@ -58,7 +58,7 @@
                                 <th width="30%" data-sortable="true">Status</th>
                             </tr>
                             <tr ng-repeat="alert in alerts track by alert.id" ng-class="{'success' : alert.alertStatus == 'Resolved', 'danger' : alert.alertStatus == 'Distressed', 'warning' : alert.alertStatus == 'En-route' || alert.alertStatus == 'On site'}" ng-hide="showResolved == 0 && alert.alertStatus == 'Resolved'">
-                                <td><button type="button" class="btn btn-primary" ng-click="assignSupport(alert)"><i class="fa fa-share"></i></button></td>
+                                <td><button type="button" class="btn btn-primary" ng-disabled="alert.alertStatus == 'Resolved'" ng-click="assignSupport(alert)"><i class="fa fa-share"></i></button></td>
                                 <td>{{ alert.userId }}</td>
                                 <td>{{ alert.alertType }}</td>
                                 <td>{{ alert.alertStatus }}</td>

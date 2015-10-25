@@ -130,7 +130,6 @@ var app = angular.module("proShepherdAdmin", [
     
     $scope.$watch('eventAlerts', function(eventAlerts) {
         var mapUser = function(value, key) {
-        	var type = value.bibNumber < 0 ? 'support' : 'user';
         	var status = "normal";
 
         	angular.forEach(value.Alerts, function(value2, key2) {
@@ -147,7 +146,27 @@ var app = angular.module("proShepherdAdmin", [
         	
             return user = {
                 id: key, 
-                type: type,
+                type: 'user',
+                state: status, 
+                latitude: value.latitude, 
+                longitude: value.longitude
+            };
+        };
+
+        var mapSupport = function(value, key) {
+        	var status = "normal";
+
+		    // if any alerts are in Step1, that user is 'distressed'
+		    // else step 2 and 3 both map to 'triage'
+		    if (value.status != "Step4") {
+		    	status = "triage";
+		    } else {
+		    	status = "normal";
+		    }
+        	
+            return user = {
+                id: key, 
+                type: 'support',
                 state: status, 
                 latitude: value.latitude, 
                 longitude: value.longitude
@@ -206,7 +225,7 @@ var app = angular.module("proShepherdAdmin", [
             });
             
             angular.forEach(eventAlerts.support, function(value, key) {
-                addUpdateUser(mapUser(value, key));
+                addUpdateUser(mapSupport(value, key));
             });
             
         }

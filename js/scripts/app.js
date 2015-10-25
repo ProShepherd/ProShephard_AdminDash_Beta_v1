@@ -12,6 +12,7 @@ var app = angular.module("proShepherdAdmin", [
     $scope.getMarker = null;
     $scope.getIcon = null;
     $scope.alerts = [];
+    $scope.showResolved = 0;
     
     $scope.init = function() {
         Alerts('Test-Event').$bindTo($scope, 'eventAlerts')

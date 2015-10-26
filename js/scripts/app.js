@@ -36,23 +36,20 @@ var app = angular.module("proShepherdAdmin", [
 
     	$scope.map = {
           center: {
-            latitude: 42.898414,
-            longitude: -78.8713798
+            latitude: 42.953052,
+            longitude: -78.873867
           },
-          zoom: 16,
+          zoom: 15,
           bounds: {}
         };
         
         $scope.eventPathPoints = [
-        	{ latitude:42.8968254, longitude: -78.8683798 },
-        	{ latitude:42.8968411, longitude: -78.8707508 },
-        	{ latitude:42.8968647, longitude: -78.8748063 },
-        	{ latitude:42.899414,  longitude: -78.87391 },
-        	{ latitude:42.8993904, longitude: -78.8699296 },
-        	{ latitude:42.9003807, longitude: -78.8695756 },
-        	{ latitude:42.9003414, longitude: -78.8672367 },
-        	{ latitude:42.8968518, longitude: -78.8683417 },
-        	{ latitude:42.8968254, longitude: -78.8683798 }
+        	{ latitude:42.953397, longitude: -78.878287 },
+        	{ latitude:42.956727, longitude: -78.878416 },
+        	{ latitude:42.956790, longitude: -78.869490 },
+        	{ latitude:42.947838,  longitude: -78.868546 },
+        	{ latitude:42.947775, longitude: -78.878244 },
+        	{ latitude:42.953397, longitude: -78.878287 }
         ];
 
         $scope.options = {
